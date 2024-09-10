@@ -1,4 +1,3 @@
-// PokemonContext.js
 import React, { createContext, useContext, useReducer } from "react";
 
 const PokemonContext = createContext();
@@ -13,17 +12,13 @@ const initialState = {
   currentPage: 1,
   searchTerm: "",
   selectedPokemon: null,
+  activeTab: "1",
 };
 
-function pokemonReducer(state, action) {
+const pokemonReducer = (state, action) => {
   switch (action.type) {
     case "SET_POKEMON":
-      return {
-        ...state,
-        pokemon: action.payload,
-        filteredPokemon: action.payload,
-        loading: false,
-      };
+      return { ...state, pokemon: action.payload, loading: false };
     case "SET_FILTERED_POKEMON":
       return { ...state, filteredPokemon: action.payload };
     case "SET_LOADING":
@@ -44,16 +39,44 @@ function pokemonReducer(state, action) {
           ? state.favorites.filter((fav) => fav.id !== action.payload.id)
           : [...state.favorites, action.payload],
       };
-    case "SET_COMPARE_POKEMON":
-      return { ...state, comparePokemon: action.payload };
-    case "SET_BATTLE_POKEMON":
-      return { ...state, battlePokemon: action.payload };
+    case "ADD_TO_COMPARE":
+      if (state.comparePokemon.length < 2) {
+        return {
+          ...state,
+          comparePokemon: [...state.comparePokemon, action.payload],
+        };
+      }
+      return state;
+    case "REMOVE_FROM_COMPARE":
+      return {
+        ...state,
+        comparePokemon: state.comparePokemon.filter(
+          (p) => p.id !== action.payload.id
+        ),
+      };
+    case "ADD_TO_BATTLE":
+      if (state.battlePokemon.length < 2) {
+        return {
+          ...state,
+          battlePokemon: [...state.battlePokemon, action.payload],
+        };
+      }
+      return state;
+    case "REMOVE_FROM_BATTLE":
+      return {
+        ...state,
+        battlePokemon: state.battlePokemon.filter(
+          (p) => p.id !== action.payload.id
+        ),
+      };
+      case 'SET_ACTIVE_TAB':
+        return { ...state, activeTab: action.payload };
     default:
       return state;
   }
-}
+};
 
-export function PokemonProvider({ children }) {
+export const PokemonProvider = ({ children }) => {
   const [state, dispatch] = useReducer(pokemonReducer, initialState);
 
   return (
@@ -61,12 +84,12 @@ export function PokemonProvider({ children }) {
       {children}
     </PokemonContext.Provider>
   );
-}
+};
 
-export function usePokemon() {
+export const usePokemon = () => {
   const context = useContext(PokemonContext);
   if (!context) {
     throw new Error("usePokemon must be used within a PokemonProvider");
   }
   return context;
-}
+};

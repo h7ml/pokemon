@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, Typography } from "antd";
+import { Card, Button, Tooltip } from "antd";
 import {
   HeartOutlined,
   HeartFilled,
@@ -9,8 +9,6 @@ import {
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import { usePokemon } from "../PokemonContext";
-
-const { Text } = Typography;
 
 const PokemonCard = ({ pokemon, showCompare = true }) => {
   const { state, dispatch } = usePokemon();
@@ -44,44 +42,71 @@ const PokemonCard = ({ pokemon, showCompare = true }) => {
     }
   };
 
+  const renderButton = (icon, text, onClick, condition = true) => (
+    <Tooltip title={text}>
+      <Button
+        icon={icon}
+        onClick={onClick}
+        className={`flex items-center justify-center ${
+          condition
+            ? "bg-blue-500 text-white hover:bg-blue-600"
+            : "bg-gray-200 hover:bg-gray-300"
+        }`}
+      >
+        <span className="hidden sm:inline ml-1">{text}</span>
+      </Button>
+    </Tooltip>
+  );
+
   const actions = [
-    <Button
-      icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
-      onClick={toggleFavorite}
-    >
-      {isFavorite ? "取消收藏" : "收藏"}
-    </Button>,
-    <Button icon={<SearchOutlined />} onClick={showDetails}>
-      查看详情
-    </Button>,
-    <Button icon={<ThunderboltOutlined />} onClick={toggleBattle}>
-      {isInBattle ? "移出对战" : "添加对战"}
-    </Button>,
+    renderButton(
+      isFavorite ? <HeartFilled /> : <HeartOutlined />,
+      isFavorite ? "取消" : "收藏",
+      toggleFavorite
+    ),
+    renderButton(<SearchOutlined />, "详情", showDetails),
+    renderButton(
+      <ThunderboltOutlined />,
+      isInBattle ? "移出" : "添加",
+      toggleBattle
+    ),
   ];
 
   if (showCompare) {
     actions.push(
-      <Button icon={<SwapOutlined />} onClick={toggleCompare}>
-        {isInCompare ? "移除比较" : "添加比较"}
-      </Button>
+      renderButton(
+        <SwapOutlined />,
+        isInCompare ? "移除" : "添加",
+        toggleCompare
+      )
     );
   }
 
   return (
-    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="animate__animated animate__fadeIn"
+    >
       <Card
         hoverable
-        cover={<img alt={pokemon.name} src={pokemon.image} />}
+        cover={
+          <img
+            alt={pokemon.name}
+            src={pokemon.image}
+            className="w-full h-48 object-contain bg-gray-100"
+          />
+        }
         actions={actions}
+        className="shadow-lg"
       >
         <Card.Meta
-          title={pokemon.name}
+          title={<span className="text-lg font-bold">{pokemon.name}</span>}
           description={
-            <>
-              <Text>#{pokemon.id}</Text>
-              <br />
-              <Text>{pokemon.types.join(", ")}</Text>
-            </>
+            <div>
+              <p className="text-gray-500">#{pokemon.id}</p>
+              <p className="text-blue-500">{pokemon.types.join(", ")}</p>
+            </div>
           }
         />
       </Card>

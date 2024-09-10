@@ -4,7 +4,7 @@ import { usePokemon } from "../PokemonContext";
 import PokemonCard from "./PokemonCard";
 
 const Favorites = () => {
-  const { state } = usePokemon();
+  const { state, dispatch } = usePokemon();
   const { favorites } = state;
 
   if (favorites.length === 0) {
@@ -13,7 +13,10 @@ const Favorites = () => {
         image={Empty.PRESENTED_IMAGE_SIMPLE}
         description="你还没有收藏任何宝可梦哦！去探索一下吧~"
       >
-        <Button type="primary" onClick={() => (window.location.hash = "#1")}>
+        <Button
+          type="primary"
+          onClick={() => dispatch({ type: "SET_ACTIVE_TAB", payload: "1" })}
+        >
           去选择宝可梦
         </Button>
       </Empty>

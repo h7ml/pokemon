@@ -4,7 +4,7 @@ import { usePokemon } from "../PokemonContext";
 import PokemonCard from "./PokemonCard";
 
 const Battle = () => {
-  const { state } = usePokemon();
+  const { state, dispatch } = usePokemon();
   const { battlePokemon } = state;
 
   const simulateBattle = () => {
@@ -52,7 +52,10 @@ const Battle = () => {
             : "再选择一个宝可梦来开始对战"
         }
       >
-        <Button type="primary" onClick={() => (window.location.hash = "#1")}>
+        <Button
+          type="primary"
+          onClick={() => dispatch({ type: "SET_ACTIVE_TAB", payload: "1" })}
+        >
           去选择宝可梦
         </Button>
       </Empty>

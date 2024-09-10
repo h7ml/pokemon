@@ -5,7 +5,7 @@ import PokemonCard from "./PokemonCard";
 import StatsChart from "./StatsChart";
 
 const Compare = () => {
-  const { state } = usePokemon();
+  const { state, dispatch } = usePokemon();
   const { comparePokemon } = state;
 
   if (comparePokemon.length < 2) {
@@ -18,7 +18,10 @@ const Compare = () => {
             : "再选择一个宝可梦来完成比较"
         }
       >
-        <Button type="primary" onClick={() => (window.location.hash = "#1")}>
+        <Button
+          type="primary"
+          onClick={() => dispatch({ type: "SET_ACTIVE_TAB", payload: "1" })}
+        >
           去选择宝可梦
         </Button>
       </Empty>

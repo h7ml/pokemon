@@ -1,13 +1,13 @@
 import React, { useEffect, useCallback } from "react";
-import { Layout, Input, message, Typography } from "antd";
+import { Layout, Input, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { usePokemon } from "./PokemonContext";
 import PokemonTabs from "./components/PokemonTabs";
 import PokemonModal from "./components/PokemonModal";
+import "animate.css";
 
 const { Header, Content } = Layout;
-const { Title } = Typography;
 
 const PokemonApp = () => {
   const { state, dispatch } = usePokemon();
@@ -60,26 +60,20 @@ const PokemonApp = () => {
   };
 
   return (
-    <Layout>
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Title level={2} style={{ color: "white", margin: 0 }}>
+    <Layout className="min-h-screen bg-gray-100">
+      <Header className="flex items-center justify-between bg-blue-600 p-4">
+        <h1 className="text-2xl font-bold text-white animate__animated animate__fadeIn">
           宝可梦图鉴
-        </Title>
+        </h1>
         <Input
           placeholder="搜索宝可梦或属性"
           prefix={<SearchOutlined />}
-          style={{ width: 250 }}
+          className="w-64 animate__animated animate__fadeInRight"
           onChange={handleSearch}
           value={searchTerm}
         />
       </Header>
-      <Content style={{ padding: "24px" }}>
+      <Content className="p-6">
         <PokemonTabs />
       </Content>
       <PokemonModal
