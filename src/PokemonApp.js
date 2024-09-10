@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from "react";
-import { Layout, Input, message } from "antd";
+import { Layout, Input, message, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { usePokemon } from "./PokemonContext";
